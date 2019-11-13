@@ -162,6 +162,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/zypper
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/zypper/commands
 
+# Fix shebang for zypper-log
+%if 0%{?suse_version} && 0%{?suse_version} < 1500
+sed -e "s|/usr/bin/env python|/usr/bin/python2|g" -i $RPM_BUILD_ROOT%{_sbindir}/zypper-log
+%else
+sed -e "s|/usr/bin/env python|/usr/bin/python3|g" -i $RPM_BUILD_ROOT%{_sbindir}/zypper-log
+%endif
+
 # yzpper symlink
 ln -s zypper $RPM_BUILD_ROOT%{_bindir}/yzpper
 
